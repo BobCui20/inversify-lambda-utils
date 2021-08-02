@@ -1,10 +1,12 @@
 import { v4 as uuid } from 'uuid';
 
-export interface ILambdaContext<T = any> {
+export interface ILambdaContext<T = any, L = any> {
 
     get request();
 
     set request(req: ApiGatewayRequest<T>);
+
+    get locals(): L;
 
 }
 
@@ -102,6 +104,7 @@ export interface LambdaHandlerMeta {
     key: string;
     target: any;
     name: string;
+    middlewares: LambdaMiddlewareParam[];
 }
 
 
@@ -118,4 +121,19 @@ export class HttpError extends Error {
         this.parentError = parentError;
         Object.setPrototypeOf(this, HttpError.prototype);
     }
+}
+
+
+export type LambdaMiddlewareParam = (new () => LambdaMiddleware) | AugmentedLambdaMiddleware;
+
+export interface AugmentedLambdaMiddleware {
+
+    middleware: new () => LambdaMiddleware;
+    args: any[];
+}
+
+export interface LambdaMiddleware {
+
+    handle(context: ILambdaContext, ...args: any[]): void;
+
 }

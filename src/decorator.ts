@@ -1,5 +1,5 @@
 import { decorate, injectable } from 'inversify';
-import { LambdaHandlerMeta } from './types';
+import { LambdaHandlerMeta, LambdaMiddlewareParam } from './types';
 import { LAMBDA_METAKEY } from './constants';
 
 export const lambda = () => {
@@ -18,12 +18,13 @@ export const lambda = () => {
     };
 };
 
-export const handler = (name?: string) => {
+export const handler = (name?: string, ...middlewares: LambdaMiddlewareParam[]) => {
     return function (target: any, key: string, value: any) {
         let metadata: LambdaHandlerMeta = {
             key,
             target,
-            name: name || key
+            name: name || key,
+            middlewares: middlewares || []
         };
 
 
