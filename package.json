@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "Inversify support for AWS lambda functions",
   "main": "index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "prepublish": "tsc"
   },
   "keywords": [
     "AWS",
