@@ -124,11 +124,11 @@ export class HttpError extends Error {
 }
 
 
-export type LambdaMiddlewareParam = (new () => LambdaMiddleware) | AugmentedLambdaMiddleware;
+export type LambdaMiddlewareParam = (new (...args: any[]) => LambdaMiddleware) | AugmentedLambdaMiddleware;
 
 export interface AugmentedLambdaMiddleware {
 
-    middleware: new () => LambdaMiddleware;
+    middleware: new (...args: any[]) => LambdaMiddleware;
     args: any[];
 }
 

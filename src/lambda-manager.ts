@@ -37,7 +37,6 @@ export class LambdaManager {
             const handlerMetas = this.getAllHandlersFromMeta(Object.getPrototypeOf(lambda).constructor);
             for (const handlerMeta of handlerMetas) {
                 const lambdaName = handlerMeta.target.constructor.name;
-                console.log(handlerMeta.target.constructor.name);
                 const handler = this.handlerFactory(lambdaName, handlerMeta.key, handlerMeta.middlewares);
                 handlers[handlerMeta.name] = handler;
             }
