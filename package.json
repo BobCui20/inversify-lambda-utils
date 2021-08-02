@@ -1,12 +1,16 @@
 {
   "name": "inversify-lambda-utils",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Inversify support for AWS lambda functions",
-  "main": "index.js",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "jest",
-    "prepublish": "tsc"
+    "prepublish": "tsc",
+    "build": "tsc"
   },
   "keywords": [
     "AWS",
