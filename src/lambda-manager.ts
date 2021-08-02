@@ -82,7 +82,7 @@ export class LambdaManager {
                     } else {
                         instance = this.container.get<LambdaMiddleware>(middleware as (new () => LambdaMiddleware));
                     }
-                    instance.handle(context, ...(args || []));
+                    await instance.handle(context, ...(args || []));
                 }
                 res = await instance[handlerName](context);
                 if (typeof res.body !== 'string') {

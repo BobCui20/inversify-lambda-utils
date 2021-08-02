@@ -134,6 +134,6 @@ export interface AugmentedLambdaMiddleware {
 
 export interface LambdaMiddleware {
 
-    handle(context: ILambdaContext, ...args: any[]): void;
+    handle(context: ILambdaContext, ...args: any[]): void | Promise<void>;
 
 }
