@@ -21,7 +21,10 @@ import {
     ApiGatewayResponse,
     LambdaMeta,
     LambdaHandlerMeta,
-    HttpError
+    HttpError,
+    LambdaMiddleware,
+    LambdaMiddlewareParam,
+    AugmentedLambdaMiddleware
 } from './types';
 
 export {
@@ -43,5 +46,8 @@ export {
     ApiGatewayResponse,
     LambdaMeta,
     LambdaHandlerMeta,
-    HttpError
+    HttpError,
+    LambdaMiddleware,
+    LambdaMiddlewareParam,
+    AugmentedLambdaMiddleware
 };

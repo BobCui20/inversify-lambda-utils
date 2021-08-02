@@ -1,7 +1,7 @@
 import { Container } from 'inversify';
 import { TYPE } from './constants';
 
-import { HttpError } from './types';
+import { AugmentedLambdaMiddleware, HttpError, LambdaMiddleware, LambdaMiddlewareParam } from './types';
 import { ApiGatewayRequestRaw, ApiGatewayResponse, LambdaHandlerMeta } from './types';
 import { BaseLambda } from './base-lambda';
 import { LAMBDA_METAKEY } from './constants';
@@ -38,7 +38,7 @@ export class LambdaManager {
             for (const handlerMeta of handlerMetas) {
                 const lambdaName = handlerMeta.target.constructor.name;
                 console.log(handlerMeta.target.constructor.name);
-                const handler = this.handlerFactory(lambdaName, handlerMeta.key);
+                const handler = this.handlerFactory(lambdaName, handlerMeta.key, handlerMeta.middlewares);
                 handlers[handlerMeta.name] = handler;
             }
         }
@@ -66,14 +66,28 @@ export class LambdaManager {
         return handlerMetas;
     }
 
-    private handlerFactory(lambdaName: string, handlerName: string) {
+    private handlerFactory(lambdaName: string, handlerName: string, middlewares: LambdaMiddlewareParam[]) {
         return async (request: ApiGatewayRequestRaw): Promise<ApiGatewayResponse> => {
             const instance = this.container.getNamed<any>(TYPE.Lambda, lambdaName);
             const context = this.container.get<LambdaContext>(TYPE.LambdaContext);
             context.request = request;
             let res;
             try {
+                for (const middleware of middlewares) {
+                    let instance;
+                    let args;
+                    if ((middleware as any).middleware) {
+                        instance = this.container.get<LambdaMiddleware>((middleware as AugmentedLambdaMiddleware).middleware);
+                        args = (middleware as AugmentedLambdaMiddleware).args;
+                    } else {
+                        instance = this.container.get<LambdaMiddleware>(middleware as (new () => LambdaMiddleware));
+                    }
+                    instance.handle(context, ...(args || []));
+                }
                 res = await instance[handlerName](context);
+                if (typeof res.body !== 'string') {
+                    res.body = JSON.stringify(res.body);
+                }
             } catch (err) {
                 if (err instanceof HttpError) {
                     res = {
@@ -89,6 +103,7 @@ export class LambdaManager {
                         }
                     };
                 } else {
+                    console.log(err);
                     const errorId = uuid();
                     res = {
                         statusCode: err.statusCode || 500,
