@@ -25,12 +25,8 @@ export class LambdaContext<T = any, L = any> implements ILambdaContext {
                 body
             };
         } catch (err) {
-
-        } finally {
-            this._request = req;
-
+            this._request = { ...req };
         }
-
     }
 
 }
