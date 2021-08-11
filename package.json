@@ -1,6 +1,6 @@
 {
   "name": "inversify-lambda-utils",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "Inversify support for AWS lambda functions",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
