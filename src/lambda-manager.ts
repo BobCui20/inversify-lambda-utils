@@ -95,7 +95,7 @@ export class LambdaManager {
                             statusCode: err.statusCode,
                             message: err.message,
                             errorId: err.errorId,
-                            reqId: context.request.requestContext.requestId
+                            reqId: context.request?.requestContext?.requestId
                         },
                         headers: {
                             "Content-Type": "application/json"
@@ -110,7 +110,7 @@ export class LambdaManager {
                             statusCode: err.statusCode || 500,
                             message: err.message || 'Internal server error',
                             errorId: errorId,
-                            reqId: context.request.requestContext.requestId
+                            reqId: context.request?.requestContext?.requestId
                         },
                         headers: {
                             "Content-Type": "application/json"
